@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+from argparse import ArgumentParser
+from re import search
+
+
+parser = ArgumentParser()
+parser.add_argument("mode", type=str, nargs='?', default="e", help="to encode use e, to decode use d (default is e)")
+parser.add_argument("text", type=str, help="plain-text to encode or encoded-text to decode")
+parser.add_argument("rot", type=str, nargs='?', default="13", help="rotations (default is 13 ie. rot13)")
+args = parser.parse_args()
+
+
+def encode(plain_text, shift):
+    encoded_text = str()
+    actual_shift = shift % 26
+
+    for char in plain_text:
+        if search(r"[a-zA-Z]", char):
+            shifted_ascii = ord(char) + actual_shift
+
+            if char.islower():  # lowercase (97 - 122)
+                if shifted_ascii > 122: shifted_ascii = ((ord(char) + actual_shift) % 122) + 97 - 1
+
+            elif char.isupper():  # uppercase (65 - 90)
+                if shifted_ascii > 90: shifted_ascii = ((ord(char) + actual_shift) % 90) + 65 - 1
+
+            shifted_char = chr(shifted_ascii) 
+            encoded_text += shifted_char
+        else: encoded_text += char                
+    return encoded_text
+
+
+def decode(encoded_text, shift):
+    decoded_text = str()
+    actual_shift = 26 - (shift % 26)
+
+    for char in encoded_text:
+        if search(r"[a-zA-Z]", char):
+            shifted_ascii = ord(char) + actual_shift
+
+            if char.islower():  # lowercase (97 - 122)
+                if shifted_ascii > 122: shifted_ascii = ((ord(char) + actual_shift) % 122) + 97 - 1
+            elif char.isupper():  # uppercase (65 - 90)
+                if shifted_ascii > 90: shifted_ascii = ((ord(char) + actual_shift) % 90) + 65 - 1
+
+            shifted_char = chr(shifted_ascii) 
+            decoded_text += shifted_char
+        else: decoded_text += char                
+
+    return decoded_text
+
+
+if __name__ == "__main__":
+    if args.mode == "e": print(encode(args.text, eval(args.rot)))
+    elif args.mode == "d": print(decode(args.text, eval(args.rot)))
