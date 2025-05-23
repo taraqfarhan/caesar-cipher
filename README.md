@@ -1,6 +1,6 @@
 # caesar-cipher
 
-Lightweight python CLI tool that lets you encode or decode text using a Caesar (letter‑rotation) cipher with customizable shift amounts. The only requirement is __python3__.
+Lightweight python CLI tool that lets you encode or decode text using a Caesar (letter‑rotation) cipher with any shift amounts. The only requirement is __python3__.
 
 # Usages
 ```sh
